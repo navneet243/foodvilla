@@ -1,35 +1,23 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useContext } from 'react'
 import { Link } from 'react-router-dom';
 import RestaurantCard from './RestaurantCard'
 import Shimmer from './Shimmer';
-
-function filterData(searchInput, restaurants){
-    const filterData = restaurants.filter((restaurant)=>
-        restaurant?.info?.name?.toLowerCase()?.includes(searchInput.toLowerCase())
-    );
-    return filterData;
-}
+import { filterData } from '../Utils/helper';
+import useOnline from '../Utils/useOnline';
+import useAllRestaurant from '../Utils/useAllRestaurant';
+import UserContext from '../Utils/UserContext';
 
 const Body = () => {
   // useState Hook
   const [searchInput, setSearchInput]= useState(""); 
-  const [filterRestaurants, setFilterRestaurants]= useState([]);
-  const [allRestaurants, setAllRestaurants]= useState([]);
-
-  useEffect(()=> {
-    //Api Call
-    getRestaurants();
-  },[])
-
-  async function getRestaurants() {
-    const data= await fetch("https://www.swiggy.com/dapi/restaurants/list/v5?lat=12.9351929&lng=77.62448069999999&page_type=DESKTOP_WEB_LISTING");
-    const json= await data.json();
-    // console.log(json);
-    setAllRestaurants(json?.data?.cards[4]?.card?.card?.gridElements?.infoWithStyle?.restaurants)
-    setFilterRestaurants(json?.data?.cards[4]?.card?.card?.gridElements?.infoWithStyle?.restaurants)
-    
+  const {user, setUser} = useContext(UserContext); // Context
+  
+  // custom hook
+  const {filterRestaurants, allRestaurants, setFilterRestaurants} = useAllRestaurant();
+  const online= useOnline();
+  if(!online){
+      return <h1> 🔴Please Check Your Internet Connection, you are currently Offline!</h1>;
   }
-  console.log("render");
 
   // not render component (early return)
   if(!allRestaurants) return null;
@@ -38,16 +26,16 @@ const Body = () => {
   return (allRestaurants?.length===0) ? <Shimmer/> : 
   (
     <>
-    <div className='search-container'>
+    <div className='p-2 bg-orange-300 m-1'>
         <input 
             type='text' 
-            className='search-input'
+            className='rounded-md justify-center text-center px-2'
             placeholder='Search food' 
             value={searchInput}
             onChange={(e)=>{setSearchInput(e.target.value)}}
         />
         <button 
-            className='search-btn' 
+            className='text-white bg-slate-800 hover:bg-black mx-3 px-2 rounded-md' 
             onClick={()=>{
                // filter restaurants
                const data= filterData(searchInput, allRestaurants);
@@ -57,12 +45,20 @@ const Body = () => {
         >
             Search
         </button> 
+        <input 
+          value={user.name} 
+          className='rounded-md text-left px-2'
+          onChange={(e)=>setUser({
+            name: e.target.value,
+            email: "nav@gmail.com",
+          })}
+        />
     </div>
-    <div className='restaurant-list'>
+    <div className='flex flex-wrap bg-orange-300'>
         {
             filterRestaurants.map((restaurant)=> {
                 return <Link to={'/restaurant/' + restaurant.info.id} key={restaurant.info.id}>
-                        <RestaurantCard {...restaurant.info} key={restaurant.info.id}/>; 
+                        <RestaurantCard {...restaurant.info} key={restaurant.info.id}/>
                        </Link>
             })
         }
@@ -72,14 +68,3 @@ const Body = () => {
 }
 
 export default Body
-
-// used before map to understand props
-
-{/* <RestrauntCard restraunt={restrauntList[0]} />
-<RestrauntCard restraunt={restrauntList[1]} />
-<RestrauntCard restraunt={restrauntList[2]} />
-<RestrauntCard restraunt={restrauntList[3]} /> 
-
-<RestrauntCard {...restrauntList[4].data} /> 
-<RestrauntCard {...restrauntList[7].data} /> 
-<RestrauntCard {...restrauntList[5].data} /> */}
