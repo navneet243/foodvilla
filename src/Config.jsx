@@ -6,7 +6,10 @@ export const IMG_CDN_URL =
 export const FETCH_MENU_URL = 
   "https://www.swiggy.com/dapi/menu/pl?page-type=REGULAR_MENU&complete-menu=true&lat=12.9352403&lng=77.624532&restaurantId="
 
-//element
+export const EMPTY_CART_URL=
+  "https://media-assets.swiggy.com/swiggy/image/upload/fl_lossy,f_auto,q_auto/2xempty_cart_yfxml0"
+
+  //element
 const restaurant = {
     "id" : "1",
     "name": "Namaste food",

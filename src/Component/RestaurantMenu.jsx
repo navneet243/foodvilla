@@ -1,38 +1,30 @@
-import React, { useState, useEffect } from 'react'
-import { useParams } from 'react-router-dom'
-import { IMG_CDN_URL } from '../Config';
-import Shimmer from './Shimmer';
-import useRestaurant from '../Utils/useRestaurant';
+import { useState } from "react";
+import { IoIosArrowDown, IoIosArrowUp } from "react-icons/io";
+import MenuItem from "./MenuItem";
 
-const RestaurantMenu = () => {
-  // used to read dynamic URL
-  const {id} = useParams();
-
-  // custom Hook
-  const {restaurant, restaurantMenu} =useRestaurant(id);
-  console.log(restaurantMenu);
-  
-  return (!restaurant) ? (
-      <Shimmer/>
-  ) :(
-    <div className='bg-orange-300 m-1 flex'>
-        <div className='w-56 h-[380px] m-2 p-2 shadow-md bg-orange-200'>
-          <img src={IMG_CDN_URL + restaurant?.cloudinaryImageId}/>  
-          <h2>{restaurant?.name}</h2>
-          <h3>Restaurant id: {id}</h3>
-          {/* <h3>{restaurant?.cuisines.join(' , ')}</h3> */}
-          <h3>{restaurant?.locality + ", " + restaurant?.city}</h3>
+const RestaurantMenu = (props) => {
+    const {title, itemCards} = props?.card?.card;
+    const [showItems, setShowItems]= useState(true);
+    
+    return (
+        <div className="p-4 m-4 shadow-xl cursor-pointer">
+            <div onClick={()=>setShowItems(!showItems)}>
+                <div className="flex justify-between">
+                    <span className="font-bold">{title} ({itemCards.length})</span>
+                    <span>{showItems? <IoIosArrowUp className="size-6"/> :  <IoIosArrowDown className="size-6"/>}</span>
+                </div>
+            </div>
+            <div>
+            {showItems && (
+                <div>
+                    {itemCards.map((item) => {
+                            return <MenuItem {...item?.card?.info} key={item?.card?.info.id}/>
+                    })}
+                </div>
+            )}
+            </div>
         </div>
-        <div >
-          <h1 className='font-bold text-3xl p-2'>Menu</h1>
-          <ul>
-              {Object.values(restaurantMenu).map((item) => (
-                  <li className='px-2 text-md' key={item?.card?.info?.id}>{item?.card?.info?.name} - Rs {item?.card?.info?.price/100}</li>
-              ))}
-          </ul>
-        </div>
-    </div>
-  )
+    )
 }
 
 export default RestaurantMenu

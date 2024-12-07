@@ -13,12 +13,17 @@ const useRestaurant = (id) => {
     },[])
 
     async function getRestaurantInfo(){
-        const data= await fetch(FETCH_MENU_URL + id)
-        const json= await data.json();
-        setRestaurant(json?.data?.cards[2]?.card?.card?.info);
-        setRestaurantMenu(json?.data?.cards[4]?.groupedCard?.cardGroupMap?.REGULAR?.cards[4]?.card?.card?.itemCards)
-        // console.log(json);
-        // console.log(json?.data?.cards[4]?.groupedCard?.cardGroupMap?.REGULAR?.cards[4]?.card?.card?.itemCards);
+        try{
+            const data= await fetch(FETCH_MENU_URL + id)
+            const json= await data.json();
+            setRestaurant(json?.data?.cards[2]?.card?.card?.info);
+            // setRestaurantMenu(json?.data?.cards[4]?.groupedCard?.cardGroupMap?.REGULAR?.cards[4]?.card?.card?.itemCards)
+            setRestaurantMenu(json?.data?.cards[4]?.groupedCard?.cardGroupMap?.REGULAR?.cards)
+            // console.log(json);
+            // console.log(json?.data?.cards[4]?.groupedCard?.cardGroupMap?.REGULAR?.cards[4]?.card?.card?.itemCards);
+        } catch (error){
+            console.log(error);
+        }
     }
 
     //return data
