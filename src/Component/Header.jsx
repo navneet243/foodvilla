@@ -2,10 +2,11 @@ import React, { useContext, useState } from 'react'
 import { Link } from 'react-router-dom';
 import UserContext from '../Utils/UserContext';
 import { useSelector } from 'react-redux';
+import logo from '../Assets/logo.png'
 
 const Title = () => {
     return (
-        <h1 className='text-3xl m-5'>Food Villa</h1>
+        <img className='w-20 m-2' src={logo}/>
     )
 };
 

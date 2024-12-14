@@ -6,8 +6,8 @@ import UserContext from "../Utils/UserContext";
 const RestaurantCard = ({cloudinaryImageId, name, cuisines, areaName, avgRating}) => {
     const {user} = useContext(UserContext);
     return (
-        <div className='w-56 h-[380px] m-2 p-2 shadow-md bg-orange-200 rounded-md'>
-            <img className="w-52 h-56" src={IMG_CDN_URL + cloudinaryImageId} />
+        <div className='w-72 h-80 mx-3 my-4 p-2 shadow-md bg-white rounded-md'>
+            <img className="w-64 h-44 rounded-lg" src={IMG_CDN_URL + cloudinaryImageId} />
             <h3 className="font-bold">{name}</h3>
             <h4 className="font-semibold">{cuisines.slice(0,3).join(" , ")}</h4>
             <h4 className="font-normal">{areaName}</h4>

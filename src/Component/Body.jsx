@@ -25,45 +25,45 @@ const Body = () => {
   //conditional rendering
   return (allRestaurants?.length===0) ? <Shimmer/> : 
   (
-    <>
-    <div className='p-2 bg-orange-300 m-1'>
-        <input 
-            type='text' 
-            className='rounded-md justify-center text-center px-2'
-            placeholder='Search food' 
-            value={searchInput}
-            onChange={(e)=>{setSearchInput(e.target.value)}}
-        />
-        <button 
-            className='text-white bg-slate-800 hover:bg-black mx-3 px-2 rounded-md' 
-            onClick={()=>{
-               // filter restaurants
-               const data= filterData(searchInput, allRestaurants);
-               // update restaurants 
-               setFilterRestaurants(data);
-            }}
-        >
-            Search
-        </button> 
-        <input 
-          value={user.name} 
-          className='rounded-md text-left px-2'
-          onChange={(e)=>setUser({
-            name: e.target.value,
-            email: "nav@gmail.com",
-          })}
-        />
+    <div className='mx-16'>
+      <div className='p-2 bg-white ml-12'>
+          <input 
+              type='text' 
+              className='rounded-md justify-center text-center px-2'
+              placeholder='Search food' 
+              value={searchInput}
+              onChange={(e)=>{setSearchInput(e.target.value)}}
+          />
+          <button 
+              className='text-white bg-slate-800 hover:bg-black mx-3 px-2 rounded-md' 
+              onClick={()=>{
+                // filter restaurants
+                const data= filterData(searchInput, allRestaurants);
+                // update restaurants 
+                setFilterRestaurants(data);
+              }}
+          >
+              Search
+          </button> 
+          {/* <input 
+            value={user.name} 
+            className='rounded-md text-left px-2'
+            onChange={(e)=>setUser({
+              name: e.target.value,
+              email: "nav@gmail.com",
+            })}
+          /> */}
+      </div>
+      <div className='flex flex-wrap ml-10 bg-white'>
+          {
+              filterRestaurants.map((restaurant)=> {
+                  return <Link to={'/restaurant/' + restaurant.info.id} key={restaurant.info.id}>
+                          <RestaurantCard {...restaurant.info}/>
+                        </Link>
+              })
+          }
+      </div>
     </div>
-    <div className='flex flex-wrap bg-orange-300'>
-        {
-            filterRestaurants.map((restaurant)=> {
-                return <Link to={'/restaurant/' + restaurant.info.id} key={restaurant.info.id}>
-                        <RestaurantCard {...restaurant.info}/>
-                       </Link>
-            })
-        }
-    </div>
-    </>
   )
 }
 
